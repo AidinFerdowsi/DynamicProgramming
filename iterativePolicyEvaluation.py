@@ -12,22 +12,22 @@ from gridWorld import standardGrid
 EPSILON = 10e-4
 
 def printValues(V,grid):
-    for i in range(grid.width):
+    for i in range(grid.height):
         print ("-------------------------------")
-        for j in range(grid.height):
+        for j in range(grid.width):
             v = V.get((i,j),0)
             if v>= 0:
-                print(" %0.2f|" % v)
+                print(" %.2f|" % v, end="")
             else:
-                print("%0.2f|" % v)
+                print("%.2f|" % v, end="")
         print("")
 
 def printPolicy(P,grid):
-    for i in range(grid.width):
+    for i in range(grid.height):
         print ("-------------------------------")
-        for j in range(grid.height):
+        for j in range(grid.width):
             a = P.get((i,j), ' ')
-            print(" %s |" % a)
+            print(" %s |" % a, end="")
         print("")
         
         
@@ -52,7 +52,9 @@ if __name__ == '__main__':
                 for a in grid.actions[s]:
                     grid.setState(s)
                     r = grid.move(a)
+                    # print (r)
                     newV +=pAction * (r + gamma * V[grid.currentState()])
+                    # print (newV)
                 V[s] = newV
                 biggestChange = max(biggestChange,np.abs(oldV-V[s]))
         if biggestChange < EPSILON:
@@ -63,16 +65,16 @@ if __name__ == '__main__':
     
     ### fixed policy ###
     policy = {
-            (2,0): "Up",
-            (1,0): "Up",
-            (0,0): "Right",
-            (0,1): "Right",
-            (0,2): "Right",
-            (1,2): "Right",
-            (2,1): "Right",
-            (2,2): "Right",
-            (2,3): "Up",
-            }
+            (2,0): "U",
+            (1,0): "U",
+            (0,0): "R",
+            (0,1): "R",
+            (0,2): "R",
+            (1,2): "R",
+            (2,1): "R",
+            (2,2): "R",
+            (2,3): "U",
+    }
     
     printPolicy(policy,grid)
     
@@ -84,13 +86,14 @@ if __name__ == '__main__':
     gamma = 0.9
     
     while True:
+        biggestChange = 0
         for s in states:
             oldV = V[s]
             if s in policy:
                 a = policy[s]
                 grid.setState(s)
                 r = grid.move(a)
-                V[s] +=pAction * (r + gamma * V[grid.currentState()])
+                V[s] = r + gamma * V[grid.currentState()]
                 biggestChange = max(biggestChange,np.abs(oldV-V[s]))
         if biggestChange < EPSILON:
             break

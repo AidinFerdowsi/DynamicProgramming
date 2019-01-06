@@ -6,7 +6,7 @@ Created on Fri Jan  4 14:32:15 2019
 """
 
 class Grid:
-    def __init__(self, width, height, start):
+    def __init__(self, height, width, start):
         self.width = width
         self.height = height
         self.y = start[0]
@@ -29,26 +29,26 @@ class Grid:
     def move(self,action):
         
         if action in self.actions[(self.y,self.x)]:
-            if action == 'Up':
+            if action == 'U':
                 self.y -=1
-            elif action == 'Down':
+            elif action == 'D':
                 self.y +=1
-            elif action == 'Right':
+            elif action == 'R':
                 self.x +=1
-            elif action == 'Left':
+            elif action == 'L':
                 self.x -=1
-        return self.rewards.get((self.x,self.y),0)
+        return self.rewards.get((self.y,self.x),0)
     
     def reverseMove(self,action):
         
-        if action in self.actions[(self.x,self.y)]:
-            if action == 'Up':
+        if action in self.actions[(self.y,self.x)]:
+            if action == 'U':
                 self.y +=1
-            elif action == 'Down':
+            elif action == 'D':
                 self.y -=1
-            elif action == 'Right':
+            elif action == 'R':
                 self.x -=1
-            elif action == 'Left':
+            elif action == 'L':
                 self.x +=1
         assert (self.currentState() in self.allStates())
         
@@ -62,15 +62,15 @@ def standardGrid():
     grid = Grid(3,4,(2,0))
     rewards = {(0,3): 1,(1,3): -1}
     actions = {
-           (0,0) : ('Down','Right'),
-           (0,1) : ('Left','Right'),
-           (0,2) : ('Left','Down','Right'),
-           (1,0) : ('Up','Down'),
-           (1,2) : ('Up', 'Down','Right'),
-           (2,0) : ('Up','Right'),
-           (2,1) : ('Left','Right'),
-           (2,2) : ('Left','Right','Up'),
-           (2,3) : ('Left','Up'),
+           (0,0) : ('D','R'),
+           (0,1) : ('L','R'),
+           (0,2) : ('L','D','R'),
+           (1,0) : ('U','D'),
+           (1,2) : ('U', 'D','R'),
+           (2,0) : ('U','R'),
+           (2,1) : ('L','R'),
+           (2,2) : ('L','R','U'),
+           (2,3) : ('L','U'),
      }
     grid.set(rewards,actions)
     return grid
@@ -88,9 +88,5 @@ def negativeGrid(stepCost = -0.1):
            (2,2) : stepCost,
            (2,3) : stepCost,
            })
-    return grid
-
-def playGame(agent,env):
-    pass
-    
+    return grid  
     
