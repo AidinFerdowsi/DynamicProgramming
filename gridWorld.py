@@ -21,14 +21,14 @@ class Grid:
         self.x = s[1]
     
     def currentState(self):
-        return(self.x,self.y)
+        return(self.y,self.x)
         
     def checkTerminal(self,s):
         return s not in self.actions
     
     def move(self,action):
         
-        if action in self.actions[(self.x,self.y)]:
+        if action in self.actions[(self.y,self.x)]:
             if action == 'Up':
                 self.y -=1
             elif action == 'Down':
@@ -56,11 +56,11 @@ class Grid:
         return (self.x,self.y) not in self.actions
     
     def allStates(self):
-        return set(self.actions.keys()+self.rewards.keys())
+        return set(list(self.actions.keys()) + list(self.rewards.keys()))
     
 def standardGrid():
     grid = Grid(3,4,(2,0))
-    rewards = {(0,3):1,(1,3):-1}
+    rewards = {(0,3): 1,(1,3): -1}
     actions = {
            (0,0) : ('Down','Right'),
            (0,1) : ('Left','Right'),
